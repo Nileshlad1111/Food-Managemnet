@@ -1,31 +1,27 @@
 package com.food;
 
-enum Taste {
-    SWEET, SPICY, SALTY;
+enum Taste{
+    SWEET, SPICY, MEDIUM_SPICY, LESS_SPICY, SALTY;
 }
-
-enum FoodType {
+enum FoodType{
     VEG, NON_VEG;
 }
-
-enum FoodCategory {
-    STARTER, MAIN_COURSE, DRINKS, DESSERT
+enum FoodCategories{
+    STARTER, MAIN_COURSE, JUICE;
 }
 
-
 public class FoodItem {
-
     private String foodName;
     private FoodType foodType;
     private float price;
     private Taste taste;
-    private FoodCategory foodCategory;
+    private FoodCategories foodCategories;
 
-    public String getFoodName() {
+    public String getFoodName(/*String foodName*/) {
         return foodName;
     }
 
-    protected void setFoodName(String foodName) {
+    public void setFoodName(String foodName) {
         this.foodName = foodName;
     }
 
@@ -33,7 +29,7 @@ public class FoodItem {
         return foodType;
     }
 
-    protected void setFoodType(FoodType foodType) {
+    public void setFoodType(FoodType foodType) {
         this.foodType = foodType;
     }
 
@@ -53,12 +49,12 @@ public class FoodItem {
         this.taste = taste;
     }
 
-    public FoodCategory getFoodCategory() {
-        return foodCategory;
+    public FoodCategories getFoodCategories() {
+        return foodCategories;
     }
 
-    public void setFoodCategory(FoodCategory foodCategory) {
-        this.foodCategory = foodCategory;
+    public void setFoodCategories(FoodCategories foodCategories) {
+        this.foodCategories = foodCategories;
     }
 
     @Override
@@ -68,7 +64,7 @@ public class FoodItem {
                 ", foodType=" + foodType +
                 ", price=" + price +
                 ", taste=" + taste +
-                ", foodCategory=" + foodCategory +
+                ", foodCategories=" + foodCategories +
                 '}';
     }
 }

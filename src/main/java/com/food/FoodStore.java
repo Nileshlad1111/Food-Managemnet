@@ -1,103 +1,144 @@
 package com.food;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class FoodStore {
-    public ArrayList<FoodItem> foodStore = new ArrayList<>();
+    HashSet<FoodItem> foodStoreList = new HashSet<>();
+    static FoodStore instance;
 
-    public void prepare(FoodItem foodItem) {
-        foodStore.add(foodItem);
+    private FoodStore() {
     }
 
-    public void deliverFood(FoodItem foodItem) {
-        foodStore.remove(foodItem);
-    }
-
-
-    public void printFood() {
-        for (FoodItem foodItem : foodStore) {
-            System.out.println(foodItem);
+    static FoodStore getInstance() {
+        if (instance == null) {
+            instance = new FoodStore();
         }
+        return instance;
+    }
+
+
+    public void deleteFoodItem(String item) {
+        foodStoreList.stream()
+                .filter(p -> p.getFoodName().equalsIgnoreCase(item))
+                /*.findFirst()*/
+                .map(p -> {
+                    foodStoreList.remove(p);
+                    return p;
+                });
     }
 
     public void printStarterItems() {
-        for (FoodItem fooditem : foodStore) {
-            if (fooditem.getFoodCategory() == (FoodCategory.STARTER)) {
-                System.out.println(fooditem);
-            }
-        }
+        foodStoreList.stream().filter(s1 -> s1.getFoodCategories().equals(FoodCategories.STARTER)).forEach(System.out::println);
     }
-
     public void printMainCourseItems() {
-        for (FoodItem fooditem : foodStore) {
-            if (fooditem.getFoodCategory() == (FoodCategory.MAIN_COURSE)) {
-                System.out.println(fooditem);
-            }
-        }
+        foodStoreList.stream().filter(s1 -> s1.getFoodCategories().equals(FoodCategories.MAIN_COURSE)).forEach(System.out::println);
     }
 
-    public void printDrinK() {
-        for (FoodItem foodItem : foodStore) {
-            if (foodItem.getFoodCategory() == (FoodCategory.DRINKS)) {
-                System.out.println(foodItem);
-            }
-        }
+    public void printJuicesItems() {
+        foodStoreList.stream().filter(s1 -> s1.getFoodCategories().equals(FoodCategories.JUICE)).forEach(System.out::println);
 
     }
 
-    public void printPrepareFood() {
-        printMainCourseItems();
+    public void printFoodStore(){
+      Collection<Object> list = Collections.singleton(foodStoreList);
+      list.stream().forEach(System.out::println);
     }
 
-    public void printDeliverFood() {
-        System.out.println("1. Deliver Starters \n " +
-                "2. Deliver Main Course \n " +
-                "3. Deliver Drinks \n " +
-                "4. Deliver Food \n " );
-        System.out.println("Enter your Choice");
+
+
+    public void addFoodItems() {
         Scanner sc = new Scanner(System.in);
-        int choice = sc.nextInt();
-        switch (choice) {
+        FoodItem foodItem = new FoodItem();
+        System.out.println("Enter the Name of Food:");
+        String foodName = sc.nextLine();
+        foodItem.setFoodName(foodName);
+
+        System.out.println("Enter the Price of Food:");
+        float foodPrice = sc.nextFloat();
+        foodItem.setPrice(foodPrice);
+        sc.nextLine();
+
+        setFoodTypeOpt(sc, foodItem);
+        setFoodCategoriesOpt(sc,foodItem);
+        setFoodTasteOpt(sc, foodItem);
+
+        foodStoreList.add(foodItem);
+    }
+
+    public void setFoodTasteOpt(Scanner sc, FoodItem foodItem) {
+        System.out.println("Enter Food Taste");
+        System.out.println("Select Food taste from below");
+        System.out.println("1. Sweet");
+        System.out.println("2. Spicy");
+        System.out.println("3. Medium Spicy");
+        System.out.println("4. Less Spicy");
+        System.out.println("5. Salty");
+        System.out.println("Enter your choice:");
+        int choice3 = sc.nextInt();
+        switch (choice3){
             case 1:
-                printStarterItems();
+                foodItem.setTaste(Taste.SWEET);
                 break;
             case 2:
-                printMainCourseItems();
+                foodItem.setTaste(Taste.SPICY);
                 break;
             case 3:
-                printDrinK();
+                foodItem.setTaste(Taste.MEDIUM_SPICY);
                 break;
-            default:
-        }
-    }
-
-    public void createSystemMenu() {
-        System.out.println("1. Print Starters \n " +
-                "2. Print Main Course \n " +
-                "3. Print Drinks \n " +
-                "4. Prepare Food \n " +
-                "5. Deliver Food");
-        System.out.println("Enter your Choice");
-        Scanner sc = new Scanner(System.in);
-        int choice = sc.nextInt();
-        switch (choice) {
-            case 1:
-                printStarterItems();
-                break;
-            case 2:
-                printMainCourseItems();
-                break;
-            case 3:
-                printDrinK();
             case 4:
-                printPrepareFood();
+                foodItem.setTaste(Taste.LESS_SPICY);
                 break;
             case 5:
-                printDeliverFood();
+                foodItem.setTaste(Taste.SALTY);
+                break;
             default:
+                System.out.println("Wrong Choice");
         }
+        sc.nextLine();
     }
 
+    public void setFoodCategoriesOpt(Scanner sc, FoodItem foodItem) {
+        System.out.println("Enter the Category of Food:");
+        System.out.println("Select food Category from below ");
+        System.out.println("1. Starter");
+        System.out.println("2. Main-Course");
+        System.out.println("3. Juice");
+        System.out.println("Enter your choice:");
+        int choice1 = sc.nextInt();
+        switch (choice1){
+            case 1:
+                foodItem.setFoodCategories(FoodCategories.STARTER);
+                break;
+            case 2:
+                foodItem.setFoodCategories(FoodCategories.MAIN_COURSE);
+                break;
+            case 3:
+                foodItem.setFoodCategories(FoodCategories.JUICE);
+                break;
+            default:
+                System.out.println("Wrong Choice");
+        }
+        sc.nextLine();
+    }
 
+    public void setFoodTypeOpt(Scanner sc, FoodItem foodItem) {
+        System.out.println("Enter the Type of Food:");
+        System.out.println("Select food type from below ");
+        System.out.println("1. Veg");
+        System.out.println("2. Non-Veg");
+        System.out.println("Enter your choice:");
+        int choice = sc.nextInt();
+        switch (choice){
+            case 1:
+                foodItem.setFoodType(FoodType.VEG);
+                break;
+            case 2:
+                foodItem.setFoodType(FoodType.NON_VEG);
+                break;
+
+            default:
+                System.out.println("Wrong Choice");
+        }
+        sc.nextLine();
+    }
 }
